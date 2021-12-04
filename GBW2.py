@@ -38,8 +38,8 @@ Q0 = 1 # Gev^2
 lambda1 = 0.248
 x0 = 0.4 * (10 ** -4)
 
-lista_F2 = [] # This list will receive the values of the F2 function that will be calculated next
-lista_x_graf = [] # This list will receive the Bjorken x values 
+lista_F2 = [] # This list will store the values of the F2 function that will be calculated next
+lista_x_graf = [] # This list will store the Bjorken x values 
 
 # Creating Bjorken's x-list to plot on a graph below:
 
