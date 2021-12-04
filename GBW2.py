@@ -44,7 +44,7 @@ lista_x_graf = [] # This list will store the Bjorken x values
 
 # Creating Bjorken's x-list to plot on a graph below:
 
-for x in np.arange(0.000001, 0.01, 0.00001):
+for x in np.arange(0.000001, 0.01, 0.0001):
 
     lista_x_graf.append(x)
         
@@ -382,7 +382,7 @@ for Q2 in lista_Q2:
     
     # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5     
     
-    for x in np.arange(0.000001, 0.01, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.0001):
         
         sig_T_up, err_T_up = nquad(func_sig_T_up, [[0, np.inf],[0, 1]])   #nquad(função, [[intervalo de r], [intervalo de z]])
             
@@ -426,7 +426,7 @@ for Q2 in lista_Q2:
     
     # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5  
     
-    for x in np.arange(0.000001, 0.01, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.0001):
         
         sig_T_down, err_T_down = nquad(func_sig_T_down, [[0, np.inf],[0, 1]])   #nquad(função, [[intervalo de r], [intervalo de z]])
             
@@ -470,7 +470,7 @@ for Q2 in lista_Q2:
     
     # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5
     
-    for x in np.arange(0.000001, 0.01, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.0001):
         
         sig_T_strange, err_T_strange = nquad(func_sig_T_strange, [[0, np.inf],[0, 1]])   #nquad(função, [[intervalo de r], [intervalo de z]])
             
@@ -520,7 +520,7 @@ for Q2 in lista_Q2:
     
     # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5
               
-    for x in np.arange(0.000001, 0.01, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.0001):
          
         sig_T_charm, err_T_charm = nquad(func_sig_T_charm, [[0, np.inf],[0, 1]])
             
@@ -570,7 +570,7 @@ for Q2 in lista_Q2:
     
     # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5
       
-    for x in np.arange(0.000001, 0.01, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.0001):
         
         sig_T_bottom, err_T_bottom = nquad(func_sig_T_bottom, [[0, np.inf],[0, 1]])
             
