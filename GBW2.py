@@ -12,68 +12,43 @@ from scipy.special import kn
 import matplotlib.pyplot as plt
 
 #-----------------------------------------------------------------------------
-#-------------------------------VARIÁVEIS-------------------------------------
+#-------------------------------VARIABLES-------------------------------------
 #-----------------------------------------------------------------------------
 
-Nc = 3
-alpha = 1/137
+Nc = 3 # number of quark colors
+alpha = 1/137 # coupling constant
 
-# Toda as cargas > 0, pois no código elas só são utilizadas ao quadrado.
+# All charges > 0, as in the code they are only used squared.
 
-e_ucb = 2/3 # Cargas dos quarks up, charm, bottom
-e_ds = 1/3 # Cargas dos quarks down, strange
+e_ucb = 2/3 # charges: quarks up, charm, bottom
+e_ds = 1/3 # charges: quarks down, strange
 
-m_l = 0.14
-m_c = 1.4
-m_b = 4.6
+m_l = 0.14 # quarks up, down, strange masses
+m_c = 1.4 # quark charm mass
+m_b = 4.6 # quark bottom mass
 
-#lista_Q2 = [0.065, 0.085, 0.11, 0.15, 0.2, 0.25, 0.35, 0.4, 0.5, 0.65, 0.85, 1.2, 1.5, 2, 2.7, 3.5, 4.5, 6.5, 8.5, 10, 12]
-lista_Q2 = [10, 12]
+# List with photon's virtualities:
 
-# Parâmetros do GBW
+lista_Q2 = [0.065, 0.085, 0.11, 0.15, 0.2, 0.25, 0.35, 0.4, 0.5, 0.65, 0.85, 1.2, 1.5, 2, 2.7, 3.5, 4.5, 6.5, 8.5, 10, 12]
 
-sig0 = (27.42 / 0.389) # Convertida para GeV^-2
+# GBW Parameters
+
+sig0 = (27.42 / 0.389) # Converted to GeV^-2
 Q0 = 1 # Gev^2
 lambda1 = 0.248
 x0 = 0.4 * (10 ** -4)
 
-lista_F2 = []
-lista_x_graf = []
+lista_F2 = [] # This list will receive the values of the F2 function that will be calculated next
+lista_x_graf = [] # This list will receive the Bjorken x values 
 
-# Criando lista de x para o gráfico:
+# Creating Bjorken's x-list to plot on a graph below:
 
-for x in np.arange(0.00000001, 0.1, 0.00001):
+for x in np.arange(0.000001, 0.01, 0.00001):
 
     lista_x_graf.append(x)
         
-# Dados do experimento:
- 
-tab = pd.DataFrame([[10.00, 1.30 * 10 ** -4, 15.60, 1.00],
-                    [10.00, 2.00 * 10 ** -4, 14.90, 0.50],
-                    [10.00, 3.20 * 10 ** -4, 13.00, 0.30],
-                    [10.00, 5.00 * 10 ** -4, 12.00, 0.30],
-                    [10.00, 8.00 * 10 ** -4, 11.00, 0.30],
-                    [10.00, 1.30 * 10 ** -3, 11.00, 0.30],
-                    [10.00, 2.00 * 10 ** -3, 9.000, 0.30],
-                    [10.00, 5.00 * 10 ** -3, 7.100, 0.10],
-                    [10.00, 2.00 * 10 ** -2, 5.900, 0.10],
-                    [12.00, 1.392 * 10 ** -4, 14.4, 0.50],
-                    [12.00, 1.61 * 10 ** -4, 13.60, 0.80],
-                    [12.00, 1.61 * 10 ** -4, 14.30, 0.30],
-                    [12.00, 1.82 * 10 ** -4, 13.30, 0.40],
-                    [12.00, 2.00 * 10 ** -4, 13.00, 0.30],
-                    [12.00, 2.00 * 10 ** -4, 13.30, 0.40],
-                    [12.00, 3.20 * 10 ** -4, 11.70, 0.20],
-                    [12.00, 3.20 * 10 ** -4, 11.80, 0.20],
-                    [12.00, 5.00 * 10 ** -4, 10.80, 0.10],
-                    [12.00, 8.00 * 10 ** -4, 9.800, 0.10],
-                    [12.00, 1.30 * 10 ** -3, 8.800, 0.10],
-                    [12.00, 2.00 * 10 ** -3, 8.000, 0.10],
-                    [12.00, 3.20 * 10 ** -3, 7.100, 0.10],
-                    [12.00, 5.00 * 10 ** -3, 6.400, 0.10],
-                    [12.00, 2.00 * 10 ** -2, 4.700, 0.10]],
-                    columns=['$Q^2$', '$x_{bj}$', '$\sigma$', 'Erro'])
-'''        
+# These data were taken from a HERA collider database. The columns are: 1) Vituality; 2) x from Bjorken; 3) Total Shock Section; 4) Error:
+      
 tab = pd.DataFrame([[0.065, 8.97 * 10 ** -7, 189.9, 20.6],
                     [0.065, 1.02 * 10 ** -6, 191.2, 18.7],
                     [0.085, 1.17 * 10 ** -6, 178.1, 17.1],
@@ -317,13 +292,13 @@ tab = pd.DataFrame([[0.065, 8.97 * 10 ** -7, 189.9, 20.6],
                     [12.00, 5.00 * 10 ** -3, 6.400, 0.10],
                     [12.00, 2.00 * 10 ** -2, 4.700, 0.10]],
                     columns=['$Q^2$', '$x_{bj}$', '$\sigma$', 'Erro'])
-'''
 
-# Loop para cada valor de virtualidade:
+
+# Loop for each virtuality value:
     
 for Q2 in lista_Q2:
     
-    # Listas para armazenar F2 de cada sabor:
+    # Lists to store F2 of each quark flavor:
     
     lista_F2u = []
     lista_F2d = []
@@ -331,19 +306,19 @@ for Q2 in lista_Q2:
     lista_F2c = []
     lista_F2b = []
     
-    # Listas para armazenar dados do experimento:
+    # Lists to store experiment data:
     
     lista_x1 = []
     lista_F21 = []
     lista_err1 = []
     
 #-----------------------------------------------------------------------------
-#----------------------------QUARKS LEVES-------------------------------------
+#----------------------------LIGHT QUARKS-------------------------------------
 #-----------------------------------------------------------------------------
     
 #---------------------------------UP------------------------------------------
 
-    # Função de integração para sigma transversal:    
+    # Integration function for transversal sigma (total cross section):    
 
     def func_sig_T_up(r, z):
         
@@ -357,7 +332,7 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_T
     
-    # Função de integração para sigma longitudinal:
+    # Integration function for longitudinal sigma (total cross section):
     
     def func_sig_L_up(r, z):
         
@@ -371,9 +346,9 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_L
     
-    # Loop de integração variando x de 0 até 10^-2 com passo 10^-5     
+    # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5     
     
-    for x in np.arange(0.00000001, 0.1, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.00001):
         
         sig_T_up, err_T_up = nquad(func_sig_T_up, [[0, np.inf],[0, 1]])   #nquad(função, [[intervalo de r], [intervalo de z]])
             
@@ -387,7 +362,7 @@ for Q2 in lista_Q2:
         
 #---------------------------------DOWN----------------------------------------
 
-    # Função de integração para sigma transversal:    
+    # Integration function for transversal sigma (total cross section):    
 
     def func_sig_T_down(r, z):
         
@@ -401,7 +376,7 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_T
     
-    # Função de integração para sigma longitudinal:
+    # Integration function for longitudinal sigma (total cross section):
     
     def func_sig_L_down(r, z):
         
@@ -415,9 +390,9 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_L
     
-    # Loop de integração variando x de 0 até 10^-2 com passo 10^-5   
+    # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5  
     
-    for x in np.arange(0.00000001, 0.1, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.00001):
         
         sig_T_down, err_T_down = nquad(func_sig_T_down, [[0, np.inf],[0, 1]])   #nquad(função, [[intervalo de r], [intervalo de z]])
             
@@ -431,7 +406,7 @@ for Q2 in lista_Q2:
 
 #-------------------------------STRANGE---------------------------------------
 
-    # Função de integração para sigma transversal:    
+    # Integration function for transversal sigma (total cross section):    
 
     def func_sig_T_strange(r, z):
         
@@ -445,7 +420,7 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_T
     
-    # Função de integração para sigma longitudinal:
+    # Integration function for longitudinal sigma (total cross section):
     
     def func_sig_L_strange(r, z):
         
@@ -459,9 +434,9 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_L
     
-    # Loop de integração variando x de 0 até 10^-2 com passo 10^-5
+    # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5
     
-    for x in np.arange(0.00000001, 0.1, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.00001):
         
         sig_T_strange, err_T_strange = nquad(func_sig_T_strange, [[0, np.inf],[0, 1]])   #nquad(função, [[intervalo de r], [intervalo de z]])
             
@@ -477,7 +452,7 @@ for Q2 in lista_Q2:
 #----------------------------QUARKS: CHARM------------------------------------
 #-----------------------------------------------------------------------------
 
-    # Função de integração para sigma transversal:
+    # Integration function for transversal sigma (total cross section):
 
     def func_sig_T_charm(r, z):
         
@@ -493,7 +468,7 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_T
     
-    # Função de integração para sigma longitudinal:
+    # Integration function for longitudinal sigma (total cross section):
     
     def func_sig_L_charm(r, z):
         
@@ -509,9 +484,9 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_L
     
-    # Loop de integração variando x de 0 até 10^-2 com passo 10^-5
+    # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5
               
-    for x in np.arange(0.00000001, 0.1, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.00001):
          
         sig_T_charm, err_T_charm = nquad(func_sig_T_charm, [[0, np.inf],[0, 1]])
             
@@ -527,7 +502,7 @@ for Q2 in lista_Q2:
 #----------------------------QUARKS: BOTTOM-----------------------------------
 #-----------------------------------------------------------------------------
 
-    # Função de integração para sigma transversal:
+    # Integration function for transversal sigma (total cross section):
 
     def func_sig_T_bottom(r, z):
         
@@ -543,7 +518,7 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_T
     
-    # Função de integração para sigma longitudinal:
+    # Integration function for longitudinal sigma (total cross section):
     
     def func_sig_L_bottom(r, z):
         
@@ -559,9 +534,9 @@ for Q2 in lista_Q2:
         
         return 2 * pi * func_sig_L
     
-    # Loop de integração variando x de 0 até 10^-2 com passo 10^-5
+    # Integration loop varying x from 10^-6 to 10^-2 with step 10^-5
       
-    for x in np.arange(0.00000001, 0.1, 0.00001):
+    for x in np.arange(0.000001, 0.01, 0.00001):
         
         sig_T_bottom, err_T_bottom = nquad(func_sig_T_bottom, [[0, np.inf],[0, 1]])
             
@@ -580,7 +555,7 @@ for Q2 in lista_Q2:
     lista_F2 = [u + d + s + c + b for (u, d, s, c, b) in F2_udscb]
 
 #-----------------------------------------------------------------------------
-#----------------------------------GRÁFICOS-----------------------------------
+#----------------------------------GRAPHICS-----------------------------------
 #-----------------------------------------------------------------------------
 
     plt.figure()
@@ -589,14 +564,14 @@ for Q2 in lista_Q2:
         
         if Q2 == tab.iloc[j,0]:
             
-        # Dados Experimentais
+        # Experimental data
             
             lista_x1.append(tab.iloc[j,1])
-            sig1 = tab.iloc[j,2] * (1/389) # CONVERTE DE MICROBARN PARA GeV^-2
+            sig1 = tab.iloc[j,2] * (1/389) # CONVERTS FROM MICROBARN TO GeV^-2
             F21 = (Q2 / (4 * pi ** 2 * alpha)) * sig1
             lista_F21.append(F21)
             #lista_F21.append(sig1)
-            err1 = tab.iloc[j,3] * (1/389) # CONVERTE DE MICROBARN PARA GeV^-2
+            err1 = tab.iloc[j,3] * (1/389) # CONVERTS FROM MICROBARN TO GeV^-2
             F2_err1 = (Q2 / (4 * pi ** 2 * alpha)) * err1
             lista_err1.append(F2_err1)
         
@@ -604,13 +579,13 @@ for Q2 in lista_Q2:
         plt.errorbar(lista_x1, lista_F21, yerr=lista_err1, fmt='.k')
         plt.xscale('log')
         
-        # Curva GBW - Atualizado
+        # GBW curve - Updated
         
         plt.plot(lista_x_graf, lista_F2)
         plt.xscale('log')
         plt.title('$Q^2 = % .3f GeV^2$' % Q2)
         plt.ylabel('$F_2$')
         plt.xlabel('x')
-        plt.savefig('/home/elsoares/Documents/TCC/codigo/Modelo_GBW-TCC2/Graph/Q2_% .3f.png'% Q2, dpi=150, bbox_inches='tight')
+        #plt.savefig('--- WRITE HERE YOUR PATH ---/Q2_% .3f.png'% Q2, dpi=150, bbox_inches='tight')
 
     plt.show()
